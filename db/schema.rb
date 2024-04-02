@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_141319) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_144113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,5 +31,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_141319) do
     t.index ["exchange_id"], name: "index_instruments_on_exchange_id"
   end
 
+  create_table "quotes", force: :cascade do |t|
+    t.datetime "time", precision: nil, null: false
+    t.decimal "open", precision: 11, scale: 4, null: false
+    t.decimal "close", precision: 11, scale: 4, null: false
+    t.decimal "high", precision: 11, scale: 4, null: false
+    t.decimal "low", precision: 11, scale: 4, null: false
+    t.integer "volume", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "instrument_id", null: false
+    t.index ["instrument_id"], name: "index_quotes_on_instrument_id"
+  end
+
   add_foreign_key "instruments", "exchanges"
+  add_foreign_key "quotes", "instruments"
 end
