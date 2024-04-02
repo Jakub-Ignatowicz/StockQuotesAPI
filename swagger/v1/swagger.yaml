@@ -404,6 +404,487 @@ paths:
                   error:
                     type: string
                     example: Exchange not found
+  "/api/v1/instruments":
+    get:
+      summary: Get all paginated instruments
+      tags:
+      - Instruments
+      parameters:
+      - name: page
+        in: query
+        description: Current page number
+        example: 1
+        schema:
+          type: integer
+      - name: items
+        in: query
+        description: Number of items per page(default 20 and maximum of 100)
+        example: 20
+        schema:
+          type: integer
+      - name: name
+        in: query
+        description: Name of a instrument you want to find
+        example: Apple
+        schema:
+          type: string
+      - name: ticker
+        in: query
+        description: Ticker of a instrument you want to find
+        example: AAPL
+        schema:
+          type: string
+      - name: exchange_id
+        in: query
+        description: Id of exchange that instrument you are searching on is listed
+          on
+        example: 1
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Instruments retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        ticker:
+                          type: string
+                          example: AAPL
+                        name:
+                          type: string
+                          example: Apple
+                        mic:
+                          type: string
+                          example: XNAS
+                        exchange_id:
+                          type: integer
+                          example: 1
+                      required:
+                      - id
+                      - ticker
+                      - name
+                      - mic
+                      - exchange_id
+                  pagination:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      pages_count:
+                        type: integer
+                        example: 13
+                      render_count:
+                        type: integer
+                        example: 1
+                      items_count:
+                        type: integer
+                        example: 13
+                      prev_url:
+                        type: string
+                        example: "/api/v1/instruments?page="
+                      next_url:
+                        type: string
+                        example: "/api/v1/instruments?page=2"
+                    required:
+                    - current_page
+                    - pages_count
+                    - render_count
+                    - items_count
+                required:
+                - records
+        '400':
+          description: Invalid page input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: expected :page in 1..2; got 3
+    post:
+      summary: Create an instrument
+      tags:
+      - Instruments
+      parameters: []
+      responses:
+        '201':
+          description: Created instrument
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  ticker:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple
+                  mic:
+                    type: string
+                    example: XNGS
+                  exchange_id:
+                    type: integer
+                    example: Nasdaq Stock Market
+                required:
+                - ticker
+                - name
+                - exchange_id
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      ticker:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - ticker can only contain letters and numbers
+                      name:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - can't be blank
+                      exchange:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Apple
+                ticker:
+                  type: string
+                  example: AAPL
+                mic:
+                  type: string
+                  example: XNGS
+                exchange_id:
+                  type: integer
+                  example: 1
+              required:
+              - mic
+              - name
+              - exchange_id
+  "/api/v1/instruments/{id}":
+    get:
+      summary: Retrieves just one instrument
+      tags:
+      - Instruments
+      parameters:
+      - name: id
+        in: path
+        description: ID of the instrument to retrieve
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Instrument found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  ticker:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple
+                  mic:
+                    type: string
+                    example: XNGS
+                  exchange_id:
+                    type: integer
+                    example: Nasdaq Stock Market
+                required:
+                - id
+                - ticker
+                - name
+                - exchange_id
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Instrument not found
+    put:
+      summary: Updates entire instrument
+      tags:
+      - Instruments
+      parameters:
+      - name: id
+        in: path
+        description: ID of the instrument to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Instrument updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  ticker:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple
+                  mic:
+                    type: string
+                    example: XNGS
+                  exchange_id:
+                    type: integer
+                    example: Nasdaq Stock Market
+                required:
+                - id
+                - mic
+                - name
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Exchange not found
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      ticker:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - ticker can only contain letters and numbers
+                      name:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - can't be blank
+                      exchange:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ticker:
+                  type: string
+                  example: AAPL
+                name:
+                  type: string
+                  example: Apple
+                mic:
+                  type: string
+                  example: XNGS
+                exchange_id:
+                  type: integer
+                  example: Nasdaq Stock Market
+    patch:
+      summary: Updates part of instrument
+      tags:
+      - Instruments
+      parameters:
+      - name: id
+        in: path
+        description: ID of the instrument to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Instrument updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  ticker:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple
+                  mic:
+                    type: string
+                    example: XNGS
+                  exchange_id:
+                    type: integer
+                    example: Nasdaq Stock Market
+                required:
+                - id
+                - mic
+                - name
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Exchange not found
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      ticker:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - ticker can only contain letters and numbers
+                      name:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - can't be blank
+                      exchange:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ticker:
+                  type: string
+                  example: AAPL
+                name:
+                  type: string
+                  example: Apple
+                mic:
+                  type: string
+                  example: XNGS
+                exchange_id:
+                  type: integer
+                  example: Nasdaq Stock Market
+    delete:
+      summary: Deletes an instrument
+      tags:
+      - Instruments
+      parameters:
+      - name: id
+        in: path
+        description: ID of the instrument to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Instrument deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  ticker:
+                    type: string
+                    example: AAPL
+                  name:
+                    type: string
+                    example: Apple
+                  mic:
+                    type: string
+                    example: XNGS
+                  exchange_id:
+                    type: integer
+                    example: Nasdaq Stock Market
+                required:
+                - id
+                - mic
+                - name
+        '404':
+          description: Instrument not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Exchange not found
 servers:
 - url: http://localhost:3000
   description: Development Server
