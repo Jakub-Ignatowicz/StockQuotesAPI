@@ -34,7 +34,7 @@ For example usage of this API you can clone this repo and go to route /api-docs/
 
 ## Concurrency 
 
-I can't find any edge case that would break this API. To my knowledge, when updated stock quotes come in, their prices aren't added to anything else. So the only possible race condition is that some data will be overwritten when many users are using the same endpoint. For example, a name might be changed to a different one in a fraction of a second.  But I can't find a good solution to this problem. If you meant that prices can be added to, then simple optimistic locking would do the trick.
+Handling concurrency for every model with optimistic locking what you can see in "concurrency" section of each model spec file
 
 ## Dependencies
 
