@@ -1,10 +1,13 @@
 FactoryBot.define do
   factory :quote do
-    time { "2024-04-02 16:37:52" }
-    open { "9.99" }
-    close { "9.99" }
-    high { "9.99" }
-    low { "9.99" }
-    volume { 1 }
+    time { Faker::Time.between(from: 2.days.ago, to: Time.now) }
+    open { Faker::Number.between(from: 1, to: 1000) }
+    close { Faker::Number.between(from: 1, to: 1000) }
+    high { Faker::Number.between(from: 1, to: 1000) }
+    low { Faker::Number.between(from: 1, to: 1000) }
+    volume { Faker::Number.between(from: 1, to: 1000) }
+
+    instrument { FactoryBot.create(:instrument) }
   end
 end
+

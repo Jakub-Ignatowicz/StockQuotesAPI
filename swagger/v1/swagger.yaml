@@ -885,6 +885,611 @@ paths:
                   error:
                     type: string
                     example: Exchange not found
+  "/api/v1/quotes":
+    get:
+      summary: Get all paginated quotes
+      tags:
+      - Quotes
+      parameters:
+      - name: page
+        in: query
+        description: Current page number
+        example: 1
+        schema:
+          type: integer
+      - name: items
+        in: query
+        description: Number of items per page(default 20 and maximum of 100)
+        example: 20
+        schema:
+          type: integer
+      - name: instrument_id
+        in: query
+        description: Id of an instrument that quote belongs to
+        example: 1
+        schema:
+          type: integer
+      - name: time
+        in: query
+        format: date-time
+        description: Timestamp of quote you want to find
+        example: '2023-03-29T20:35:12.000Z'
+        schema:
+          type: string
+      - name: open
+        in: query
+        description: Open price of quote you want to find
+        example: 1235.1234
+        schema:
+          type: number
+      - name: close
+        in: query
+        description: Close price of quote you want to find
+        example: 1234.5678
+        schema:
+          type: number
+      - name: high
+        in: query
+        description: High price of quote you want to find
+        example: 1236.0
+        schema:
+          type: number
+      - name: low
+        in: query
+        description: Low price of quote you want to find
+        example: 1233.9999
+        schema:
+          type: number
+      - name: volume
+        in: query
+        description: How many transactions happened in this quote
+        example: 10000
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Quotes retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        time:
+                          type: string
+                          example: '2023-03-29T20:35:12.000Z'
+                        instrument_id:
+                          type: integer
+                          example: 1
+                        ticker:
+                          type: string
+                          example: AMZN
+                        mic:
+                          type: string
+                          example: XNGS
+                        low:
+                          type: number
+                          example: 1233.9999
+                        high:
+                          type: number
+                          example: 1236.0
+                        open:
+                          type: number
+                          example: 1235.1234
+                        close:
+                          type: number
+                          example: 1234.5678
+                        volume:
+                          type: integer
+                          example: 10000
+                      required:
+                      - id
+                      - instrument_id
+                      - ticker
+                      - mic
+                      - low
+                      - high
+                      - open
+                      - close
+                      - volume
+                  pagination:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      pages_count:
+                        type: integer
+                        example: 13
+                      render_count:
+                        type: integer
+                        example: 1
+                      items_count:
+                        type: integer
+                        example: 13
+                      prev_url:
+                        type: string
+                        example: "/api/v1/quotes?page="
+                      next_url:
+                        type: string
+                        example: "/api/v1/quotes?page=2"
+                    required:
+                    - current_page
+                    - pages_count
+                    - render_count
+                    - items_count
+                required:
+                - records
+        '400':
+          description: Invalid page input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: expected :page in 1..2; got 3
+    post:
+      summary: Create an quote
+      tags:
+      - Quotes
+      parameters: []
+      responses:
+        '201':
+          description: Created quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  instrument_id:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2023-03-29T20:35:12.000Z'
+                  ticker:
+                    type: string
+                    example: AMZN
+                  mic:
+                    type: string
+                    example: XNGS
+                  low:
+                    type: number
+                    example: 1233.9999
+                  high:
+                    type: number
+                    example: 1236.0
+                  open:
+                    type: number
+                    example: 1235.1234
+                  close:
+                    type: number
+                    example: 1234.5678
+                  volume:
+                    type: integer
+                    example: 10000
+                required:
+                - id
+                - instrument_id
+                - ticker
+                - mic
+                - low
+                - high
+                - open
+                - close
+                - volume
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      low:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrument_id:
+                  type: integer
+                  example: 1
+                time:
+                  type: string
+                  example: '2023-03-29T20:35:12.000Z'
+                low:
+                  type: number
+                  example: 1233.9999
+                high:
+                  type: number
+                  example: 1236.0
+                open:
+                  type: number
+                  example: 1235.1234
+                close:
+                  type: number
+                  example: 1234.5678
+                volume:
+                  type: integer
+                  example: 10000
+              required:
+              - instrument_id
+              - time
+              - low
+              - high
+              - open
+              - close
+              - volume
+  "/api/v1/quotes/{id}":
+    get:
+      summary: Retrieves just one quote
+      tags:
+      - Quotes
+      parameters:
+      - name: id
+        in: path
+        description: ID of the quote to retrieve
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Quote found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  instrument_id:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2023-03-29T20:35:12.000Z'
+                  ticker:
+                    type: string
+                    example: AMZN
+                  mic:
+                    type: string
+                    example: XNGS
+                  low:
+                    type: number
+                    example: 1233.9999
+                  high:
+                    type: number
+                    example: 1236.0
+                  open:
+                    type: number
+                    example: 1235.1234
+                  close:
+                    type: number
+                    example: 1234.5678
+                  volume:
+                    type: integer
+                    example: 10000
+                required:
+                - id
+                - instrument_id
+                - ticker
+                - mic
+                - low
+                - high
+                - open
+                - close
+                - volume
+        '404':
+          description: Quote not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Quote not found
+    put:
+      summary: Updates entire quote
+      tags:
+      - Quotes
+      parameters:
+      - name: id
+        in: path
+        description: ID of the quote to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Quote updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  instrument_id:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2023-03-29T20:35:12.000Z'
+                  ticker:
+                    type: string
+                    example: AMZN
+                  mic:
+                    type: string
+                    example: XNGS
+                  low:
+                    type: number
+                    example: 1233.9999
+                  high:
+                    type: number
+                    example: 1236.0
+                  open:
+                    type: number
+                    example: 1235.1234
+                  close:
+                    type: number
+                    example: 1234.5678
+                  volume:
+                    type: integer
+                    example: 10000
+        '404':
+          description: Quote not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Quote not found
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      low:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must be greater than or equal to 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrument_id:
+                  type: integer
+                  example: 1
+                time:
+                  type: string
+                  example: '2023-03-29T20:35:12.000Z'
+                ticker:
+                  type: string
+                  example: AMZN
+                mic:
+                  type: string
+                  example: XNGS
+                low:
+                  type: number
+                  example: 1233.9999
+                high:
+                  type: number
+                  example: 1236.0
+                open:
+                  type: number
+                  example: 1235.1234
+                close:
+                  type: number
+                  example: 1234.5678
+                volume:
+                  type: integer
+                  example: 10000
+    patch:
+      summary: Updates part of a quote
+      tags:
+      - Quotes
+      parameters:
+      - name: id
+        in: path
+        description: ID of the quote to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Quote updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  instrument_id:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2023-03-29T20:35:12.000Z'
+                  ticker:
+                    type: string
+                    example: AMZN
+                  mic:
+                    type: string
+                    example: XNGS
+                  low:
+                    type: number
+                    example: 1233.9999
+                  high:
+                    type: number
+                    example: 1236.0
+                  open:
+                    type: number
+                    example: 1235.1234
+                  close:
+                    type: number
+                    example: 1234.5678
+                  volume:
+                    type: integer
+                    example: 10000
+        '404':
+          description: Quote not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Quote not found
+        '422':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      low:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                        - must be greater than or equal to 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrument_id:
+                  type: integer
+                  example: 1
+                time:
+                  type: string
+                  example: '2023-03-29T20:35:12.000Z'
+                ticker:
+                  type: string
+                  example: AMZN
+                mic:
+                  type: string
+                  example: XNGS
+                low:
+                  type: number
+                  example: 1233.9999
+                high:
+                  type: number
+                  example: 1236.0
+                open:
+                  type: number
+                  example: 1235.1234
+                close:
+                  type: number
+                  example: 1234.5678
+                volume:
+                  type: integer
+                  example: 10000
+    delete:
+      summary: Deletes a quote
+      tags:
+      - Quotes
+      parameters:
+      - name: id
+        in: path
+        description: ID of the quote to update
+        example: '1'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Quote deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  instrument_id:
+                    type: integer
+                    example: 1
+                  time:
+                    type: string
+                    example: '2023-03-29T20:35:12.000Z'
+                  ticker:
+                    type: string
+                    example: AMZN
+                  mic:
+                    type: string
+                    example: XNGS
+                  low:
+                    type: number
+                    example: 1233.9999
+                  high:
+                    type: number
+                    example: 1236.0
+                  open:
+                    type: number
+                    example: 1235.1234
+                  close:
+                    type: number
+                    example: 1234.5678
+                  volume:
+                    type: integer
+                    example: 10000
+        '404':
+          description: Quote not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Quote not found
 servers:
 - url: http://localhost:3000
   description: Development Server
