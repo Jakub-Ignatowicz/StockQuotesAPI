@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Quote, type: :model do
   let(:instrument) do
-    Instrument.create(ticker: 'ABC', name: 'Test Instrument',
-                      exchange: Exchange.create(mic: 'TEST', name: 'Test Exchange'))
+    FactoryBot.create(:instrument)
   end
 
   describe 'validations' do
@@ -70,5 +69,21 @@ RSpec.describe Quote, type: :model do
       expect(association.macro).to eq :belongs_to
     end
   end
-end
 
+  describe 'concurrency' do
+    it 'throws error while adding twice to same record' do
+      quote = Quote.new(time: Time.now, open: 0.0, close: 0.0, high: 0.0, low: 0.0, volume: 0,
+                        instrument:)
+      quote.save
+
+      first_quote = Quote.first
+      second_quote = Quote.first
+
+      first_quote.volume += 1
+      first_quote.save
+
+      second_quote.volume += 1
+      expect { second_quote.save! }.to raise_error(ActiveRecord::StaleObjectError)
+    end
+  end
+end
