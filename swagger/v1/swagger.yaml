@@ -405,7 +405,5 @@ paths:
                     type: string
                     example: Exchange not found
 servers:
-- url: https://{defaultHost}
-  variables:
-    defaultHost:
-      default: www.example.com
+- url: http://localhost:3000
+  description: Development Server
