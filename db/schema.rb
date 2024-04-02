@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_220312) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_220929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_220312) do
     t.string "mic", limit: 4, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "lock_version", default: 0
     t.index ["mic"], name: "index_exchanges_on_mic", unique: true
   end
 
