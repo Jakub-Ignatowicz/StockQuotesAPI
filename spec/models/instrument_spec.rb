@@ -58,5 +58,19 @@ describe Instrument, type: :model do
       expect(association.macro).to eq :belongs_to
     end
   end
-end
+  describe 'concurrency' do
+    it 'throws error while renaming twice same record' do
+      instrument = FactoryBot.create(:instrument)
+      instrument.save
 
+      first_instrument = Instrument.first
+      second_instrument = Instrument.first
+
+      first_instrument.name = 'a'
+      first_instrument.save
+
+      second_instrument.name = 'b'
+      expect { second_instrument.save! }.to raise_error(ActiveRecord::StaleObjectError)
+    end
+  end
+end

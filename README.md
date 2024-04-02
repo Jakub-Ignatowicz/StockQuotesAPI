@@ -1,24 +1,45 @@
-# README
+<p align="center">
+  <img width="200" src="https://cdn.freebiesupply.com/logos/thumbs/2x/rails-1-logo.png" alt="Rails Logo">
+</p>
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Stock quotes API with Ruby on Rails
 
-Things you may want to cover:
+This repository contains a simple Stock Quotes API built in Ruby on Rails that utilizes Postgres as its primary database. The API is designed to handle basic CRUD operations for stock quotes concurrently.
 
-* Ruby version
+## Setup
 
-* System dependencies
+Before running the application, ensure that you have Rails and Postgres installed on your system.
 
-* Configuration
+1. Clone the repository:
 
-* Database creation
+   ```bash
+   git clone https://github.com/Jakub-Ignatowicz/StockQuotesAPI.git
+   cd StockQuotesAPI 
+   ```
 
-* Database initialization
+2. Install dependencies:
 
-* How to run the test suite
+   ```bash
+   bundle
+   ```
 
-* Services (job queues, cache servers, search engines, etc.)
+3. Run the application:
+   ```bash
+   rails s
+   ```
 
-* Deployment instructions
+## API Routes and Example Usage
 
-* ...
+For example usage of this API you can clone this repo and go to route /api-docs/index.html or just check out it right here:   
+
+## Concurrency 
+
+Handling concurrency for every model with optimistic locking what you can see in "concurrency" section of each model spec file
+
+## Dependencies
+
+- github.com/rspec/rspec-rails: Testing library.
+- github.com/thoughtbot/factory_bot_rails: Simplifies data generation for testing.
+- github.com/faker-ruby/faker: Provides dummy data for testing. 
+- github.com/ddnexus/pagy: Pagination library. 
+- github.com/rswag/rswag: Auto-generation for documentation of API with rspec.
