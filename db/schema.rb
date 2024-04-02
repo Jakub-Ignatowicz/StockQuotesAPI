@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_121607) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_141319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,4 +22,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_121607) do
     t.index ["mic"], name: "index_exchanges_on_mic", unique: true
   end
 
+  create_table "instruments", force: :cascade do |t|
+    t.string "ticker", limit: 20, null: false
+    t.string "name", limit: 256, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "exchange_id", null: false
+    t.index ["exchange_id"], name: "index_instruments_on_exchange_id"
+  end
+
+  add_foreign_key "instruments", "exchanges"
 end
