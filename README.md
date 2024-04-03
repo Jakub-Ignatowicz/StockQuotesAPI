@@ -30,11 +30,15 @@ Before running the application, ensure that you have Rails and Postgres installe
 
 ## API Routes and Example Usage
 
-For example usage of this API you can clone this repo and go to route /api-docs/index.html or just check out it right here:   
+For example usage of this API you can clone this repo and go to route /api-docs/index.html or just check out it right here: [docs](https://whale-app-llbtw.ondigitalocean.app/api-docs/index.html)   
 
 ## Concurrency 
 
 Handling concurrency for every model with optimistic locking what you can see in "concurrency" section of each model spec file
+
+##  ERD
+
+You can find ERD for database in the db directory
 
 ## Dependencies
 
