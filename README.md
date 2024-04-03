@@ -32,6 +32,8 @@ Before running the application, ensure that you have Rails and Postgres installe
 
 For example usage of this API you can clone this repo and go to route /api-docs/index.html or just check out it right here: [docs](https://whale-app-llbtw.ondigitalocean.app/api-docs/index.html)   
 
+Remember to change server to Production while working on my deployed docs  
+
 ## Concurrency 
 
 Handling concurrency for every model with optimistic locking what you can see in "concurrency" section of each model spec file
@@ -47,3 +49,4 @@ You can find ERD for database in the db directory
 - github.com/faker-ruby/faker: Provides dummy data for testing. 
 - github.com/ddnexus/pagy: Pagination library. 
 - github.com/rswag/rswag: Auto-generation for documentation of API with rspec.
+

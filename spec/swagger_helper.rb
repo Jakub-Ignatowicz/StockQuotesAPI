@@ -26,6 +26,10 @@ RSpec.configure do |config|
         {
           url: 'http://localhost:3000',
           description: 'Development Server'
+        },
+        {
+          url: 'https://whale-app-llbtw.ondigitalocean.app/',
+          description: 'Production Server'
         }
       ]
     }
